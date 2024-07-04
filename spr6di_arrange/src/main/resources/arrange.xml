@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- scope="singleton" 이 생략되어 있음 -->
+	<bean id="mImpl" class="pack.controller.MessageImpl" scope="singleton"> <!-- "prototype" -->
+		<!-- 1 )생상자를 주입하려고 하는데 생성자에 아규먼트 값이 있어서 조정해야되 constructor안에 value-->
+		<constructor-arg index="1" type="java.lang.String">
+			<value>안녕하세요</value>
+		</constructor-arg>
+		<constructor-arg index="0" type="String">
+			<value>반가워요</value>
+		</constructor-arg>
+		<constructor-arg index="2" type="int" value="24" />
+		<constructor-arg index="3" type="pack.model.MyInfoInter" ref="my" /> <!-- 19번 줄 참조 name="my" -->
+	
+		<!-- 2)setter constructor -->
+		<property name="spec">
+			<value>자바 개발 전문</value>
+		</property>
+		<property name="fileInter">
+			<ref bean="outFileInterImpl" />
+		</property>
+	</bean>
+	
+	<bean id="myInfo" name="my,good" class="pack.model.MyInfo" />
+	
+	<!-- 23번 줄 참조를 위해서 설정한거임 -->
+	<bean id="outFileInterImpl" class="pack.other.OutFileInterImpl">
+		<property name="filepath" value="c:/work2/message.txt" />
+	</bean>
+</beans>
