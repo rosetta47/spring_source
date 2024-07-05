@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component;
 //@Component("sender")
 // single pattern으로 Sender 객체가 생성됨(지가 스스로 인스턴스 하는 거임) 객체 변수명은 sender로 알아서 생성
 //@Scope("singleton")
-public class Sender {
+public class Sender implements SenderInter{
 	public void show() {
-		System.out.println("Sender의 show메소드 수행");
+		System.out.println("Sender의 show 메소드 수행");
 	}
 }
