@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<h3>😺회원 정보(@MVC : JdbcDaoSupport)😍</h3>
+
+<a href="/insert">추가</a> 또는 <a th:href="@{/insert}">추가</a>
+<table border="1">
+	<th:block th:if="${list.size >0}">
+	<tr>
+		<th>아이디</th><th>회원명</th>
+	</tr>
+	<tr th:each="mem:${list}">
+		<td th:text="${mem.id}">id</td>
+		<!-- 
+		<td th:text="${mem.name}">name</td>
+		 -->
+		 <td>
+		 	<a th:href="@{/detail(id=${mem.id})}" th:text="${mem.name}">name</a>
+		 </td>
+		 
+	</tr>
+	</th:block>
+</table>
+</body>
+</html>

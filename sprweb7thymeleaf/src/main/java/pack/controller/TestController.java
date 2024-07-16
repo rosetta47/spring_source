@@ -71,4 +71,10 @@ public class TestController {
 		model.addAttribute("arg2", param2);
 		return "show4";
 	}
+	
+	@GetMapping("/ex5")
+	public String abc5() {
+		
+		return "show5";
+	}
 }
