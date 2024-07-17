@@ -4,12 +4,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+import javax.swing.tree.TreePath;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.stereotype.Repository;
 
-import pack.controller.MemberBean;
+import pack.controller.MemberBean; 
 
 @Repository
 public class MemberDao extends JdbcDaoSupport{
@@ -58,7 +60,33 @@ public class MemberDao extends JdbcDaoSupport{
 		getJdbcTemplate().update(sql, params);
 	}
 	
+	// 특정 레코드 읽기
+	public MemberDto getMember(String id) {
+		String sql = "select * from membertab where id=?";
+		
+		MemberDto dto = (MemberDto)getJdbcTemplate().queryForObject(sql, new Object[] {id}, new RowMapper() {
+			@Override
+			public Object mapRow(ResultSet rs, int rowNum) throws SQLException {
+				MemberDto dto = new MemberDto();
+				dto.setId(rs.getString("id"));
+				dto.setName(rs.getString("name"));
+				dto.setPasswd(rs.getString("passwd"));
+				dto.setReg_date(rs.getString("reg_date"));
+				return dto;
+			}
+		});
+		return dto;
+	}
+	
 	// 수정
+	public void upData(MemberBean bean) {
+		String sql="update membertab set name=?,passwd=? where id=?";
+		getJdbcTemplate().update(sql, new Object[] {bean.getName(),bean.getPasswd(), bean.getId()});
+	}
 	
 	// 삭제
+	public void delData(String id) { //하나만 삭제하니까 String으로 함
+		String sql="delete from membertab where id=?";
+		getJdbcTemplate().update(sql, new Object[] {id});
+	}
 }

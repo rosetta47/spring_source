@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+삭제하기<p/>
+<form th:action="@{/delete}" method="post">
+	id : <input type="text" name="id" /><br>
+	<br>
+	<input type="submit" value="삭 제">
+	<input type="button" value="이 전" onclick="history.back()">
+</form>
+</body>
+</html>
