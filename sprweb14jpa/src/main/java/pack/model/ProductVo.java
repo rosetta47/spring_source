@@ -14,6 +14,7 @@ import lombok.Data;
 public class ProductVo {
 	@Id
 	@Column(name="code")
+	//@GeneratedValue 어노테이션을 사용하면 식별자 값을 자동 생성 시켜줄 수 있다.
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int code;
 	
