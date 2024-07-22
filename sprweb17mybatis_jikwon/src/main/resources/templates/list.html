@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>templates/list.html</title>
+</head>
+<body>
+<h3>❤️ 글 목록 (스프링 연습문제) 🙈</h3>
+<table border="1">
+	<tr>
+		<td colspan="5">
+			<form th:action="@{search}" method="post">
+			부서명 : 
+			<select name="searchName">
+				<option value="buser_num=10" selected="selected">총무부</option>
+				<option value="buser_num=20">영업부</option>
+				<option value="buser_num=30">전산부</option>
+				<option value="buser_num=40">관리부</option>
+			</select>
+			<input type="submit" name="searchValue" value="확인"><br>
+			평가등급<br>
+ 			<input type='radio' name='jikwon_rating' value='jikwon_rating' />전체
+  			<input type='radio' name='jikwon_rating' value='a'>a
+  			<input type='radio' name='jikwon_rating' value='b'>b
+ 			 <input type='radio' name='jikwon_rating' value='c'>c
+  <br>
+			</form>
+		</td>
+	</tr>
+	<tr>
+		<th>사번</th><th>이름</th><th>직급</th><th>연봉</th><th>평가</th>
+	</tr>
+	<th:block th:if="${list.size > 0}">
+	<tr th:each="data:${list}">
+		<td th:text="${data.jikwon_no}">jikwon_no</td>
+		<td th:text="${data.jikwon_name}">jikwon_name</td>
+		<td th:text="${data.jikwon_jik}">jikwon_jik</td>
+		<td th:text="${data.jikwon_pay}">jikwon_pay</td>
+		<td th:text="${data.jikwon_rating}">jikwon_rating</td>
+	</tr>
+	</th:block>
+
+	
+</table>
+</body>
+</html>

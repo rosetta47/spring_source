@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="pack.model.DataMapInterface">
+   <select id="selectList" resultType="pack.model.Board">
+      select * from springboard order by num desc   <!-- 최근 글부터 먼저 나오도록 -->
+   </select>
+
+   <select id="selectSearch" parameterType="pack.controller.BoardBean" resultType="pack.model.Board">
+      select * from springboard
+      where ${searchName} like concat('%',#{searchValue},'%')      <!-- data를 매핑시킬때는 #, 칼람을 매핑시킬때는 $ -->
+      order by num desc
+   </select>
+
+   <select id="selectOne" parameterType="string" resultType="pack.model.Board">
+      select * from springboard where num=#{num}
+   </select>
+   
+   <insert id="insert" parameterType="pack.controller.BoardBean">
+      insert into springboard(num,author,title,content,bwrite,readcnt)
+      values((select max(num) + 1 from springboard ali),   <!-- 마리아디비에서 서브쿼리를 쓸때는 "springboard ali(별명)"처럼 별명을 줘야한다. 오라클은 괜찮다. 서브쿼리를 쓰는데 같은 테이블일 경우에는 별명을 줘야해!!! -->
+      #{author},#{title},#{content},now(),0)
+   </insert>
+   
+   <update id="updateReadcnt" parameterType="string">   <!-- readcnt를 업데이트 -->
+      update springboard set readcnt=readcnt + 1
+      where num=#{num}
+   </update>
+   
+   <update id="update" parameterType="pack.controller.BoardBean">
+      update springboard
+      set author=#{author},title=#{title},content=#{content}
+      where num=#{num}
+   </update>
+   
+   <delete id="delete" parameterType="string">
+      delete from springboard
+      where num=#{num}
+   </delete>
+</mapper>

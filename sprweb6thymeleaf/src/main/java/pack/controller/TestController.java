@@ -30,6 +30,8 @@ public class TestController {
 		sangpum.setPrice("2000");	
 		list.add(sangpum);
 		
+		
+		
 		model.addAttribute("list",list);
 		
 		return "list1"; // forward으로 templates 폴더 안으로 들어감
