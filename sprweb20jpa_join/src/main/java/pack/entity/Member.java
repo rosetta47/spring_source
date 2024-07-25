@@ -12,10 +12,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import pack.dto.MemberDto;
 
 @Getter
-@Builder
+@Setter
+@Builder // builder사용할때는 @Data 사용하지말고 @Getter,@Setter 사용해
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity

@@ -12,6 +12,7 @@ public interface EmpRepository extends JpaRepository<Emp, Integer>{
 	 // 메소드룰 따라서 만든 메소드
 	// 사원 번호에 대해 오름차순 정렬된 목록 반환 메소드(쿼리문 안쓰고 룰 써서 만듬)
 	public List<Emp> findAllByOrderByEmpnoAsc();
+	public List<Emp> findAllByOrderByEmpnoDesc();
 	
 	// findAllByOrderByEmpnoAsc() 메소드를 JPQL로 적는다면 아래와 같다.
 	@Query(value = "select e from Emp e order by e.empno asc")		// 룰을 이해하고 있다면 이렇게 길게 쓸 필요 없겠지!!
