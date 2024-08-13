@@ -76,7 +76,7 @@ public class MemberController {
 		return dao.getList();
 	}
 	
-	@PostMapping("/members")//members insert,delete(post)
+	@PostMapping("/members")// members insert,delete(post)
 	public Map<String, Object> insert(@RequestBody MemberDto dto) {
 		//@RequestBody :요청 본문에 담긴 값(json)을 자바 객체로 변환
 		dao.insert(dto);
@@ -95,8 +95,8 @@ public class MemberController {
 	}
 	
 	// 수정
-	@PutMapping("/members/{num}")
-	public Map<String, Object> update(@PathVariable("num")int num,
+	@PutMapping("/members/{num}")//@PathVariable("num")int num,
+	public Map<String, Object> update(
 			@RequestBody MemberDto dto) {
 		//dto.setNum(num);
 		dao.update(dto);
