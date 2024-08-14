@@ -11,4 +11,6 @@ public interface MemberRepository extends JpaRepository<Member, Long>{
 	// 정렬
 	// 메소드 룰에 따른 내림차순 전체 자료 읽기
 	public List<Member> findAllByOrderByNumDesc();
+	
+	
 }
