@@ -25,6 +25,9 @@ public class WebController {
 		return "list";
 	}
 	
-	
+	@GetMapping("/login")
+	public String showLoginPage() {
+		return "login";
+	}
 	
 }
