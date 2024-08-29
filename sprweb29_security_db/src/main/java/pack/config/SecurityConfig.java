@@ -16,6 +16,7 @@ import jakarta.servlet.http.HttpSessionEvent;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+	
 	// 애플리케이션 보안 설정을 담당
 	// 특정 URL 허용 여부, 로그인 및 로그아웃 처리 방법, 사용자 인증 방법 등을 포함
 	// 보안 설정, 인증방법
@@ -42,6 +43,7 @@ public class SecurityConfig {
 		.logout(logout -> logout
 				.logoutUrl("/auth/logout") 
 				.logoutSuccessUrl("/auth/login")
+				.invalidateHttpSession(true) //세션무효화
 				.permitAll());
 		
 		return http.build();
