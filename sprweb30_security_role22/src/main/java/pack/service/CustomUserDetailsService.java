@@ -36,7 +36,8 @@ public class CustomUserDetailsService implements UserDetailsService{
 		// DB에서 username을 이용해 사용자 정보(이름, 비번, 이메일, 권한, ...)를 얻어 온다.
 		
 		User user = User.builder()
-				.id(1).userName(username)
+				.id(1) // DB 가 있으면 대체됨 여긴 없어서 설정해준거임
+				.userName(username)
 				.password(encoder.encode("1234")).email("@").role(role).build();
 		
 		// 원래는 권한 정보도 따로 테이블을 만들어서 관리해 하나의 계정이 다양한 권한을 가질 수 있도록 해야하나 하나 샘플이므로 생략함
