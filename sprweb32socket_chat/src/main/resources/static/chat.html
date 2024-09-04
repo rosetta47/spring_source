@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>static/index.html</title>
+<link rel="stylesheet" href="/css/chat.css">
+<script
+   src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
+<script
+   src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+
+<script type="text/javascript">
+   let stompClient = null;
+
+   function connect() {
+      let socket = new SockJS('/ws')// SockJS 생성자로 /ws를 줘.      /ws 엔드포인트를 통해 WebSocket 연결 객체를 생성
+
+      // 클라이언트가 WebSocket 연결을 통해서 Stomp(클래스)를 사용할 수 있도록 설정
+      stompClient = Stomp.over(socket);
+
+      // 연결에 성공하면 콜백 함수가 호출
+      stompClient.connect({}, function(frame) { // frame : command, header, body 로 구성
+         console.log('connected : ' + frame);
+         // '/topic/messages'로 수신된 메세지를 처리
+         // 메세지를 수신(구독)할 클라이언트는 서버가 해당 경로에 브로드캐스트한 메세지를 모두 수신 가능
+         // 특정 주제('/topic/public')를 구독하여, 서버에서 메시지를 수신
+         stompClient.subscribe('/topic/public', function(message) {
+            showMessage(message.body);
+            //showMessage(JSON.parse(message.body));
+         });
+      })
+
+   }
+
+   function leaveChat() {
+      if (stompClient) {
+         stompClient.disconnect();
+      }
+
+      document.querySelector("#name").disabled = false;
+      alert("Bye");
+   }
+
+   function sendMessage() { // 메세지를 서버로 전송하는 함수
+      let nameInput = document.querySelector("#name");
+      let messageContent = document.querySelector("#message").value;
+
+      // 채팅명(이름) 입력이 완료되지 않은 경우, 채팅명을 입력 후 서버로 전송 ==> 이름 입력란을 비활성화
+      if (!nameInput.disabled) { // disabled가 아니다!
+         stompClient.send("/app/chat.addUser", {}, JSON.stringify({
+            sender : nameInput.value,
+            type : 'JOIN'
+         }));
+         nameInput.disabled = true;
+      }
+
+      // 입력된 메시지가 있고, 연결이 된 상태일 때
+      if (messageContent && stompClient) {
+         let chatMessage = {
+            sender : nameInput.value,
+            content : messageContent,
+            type : "CHAT"
+         };
+
+         stompClient.send("/app/chat.sendMessage", {}, JSON.stringify(chatMessage));
+         document.querySelector("#message").value = "";
+      }
+
+      // send(메세지목적지,메세지헤더,메세지내용(payload라고 함)) - 채팅 메세지, 데이터 갱신 요청, 좋아요 요청 등을 서버로 전달하는 데 사용
+      stompClient.send('/app/message', {}, messageContent);
+   }
+   
+   function showMessage(message) {
+
+       let messageData = JSON.parse(message);
+
+       let messageElement = document.createElement("li");
+
+       // 메시지 타입에 따라 출력 내용 다름
+       if (messageData.type === 'JOIN') {
+           messageElement.classList.add('event-message');
+           messageData.content = messageData.sender + " 님이 입장하셨습니다.";
+       } else if (messageData.type === 'LEAVE') {
+           messageElement.classList.add('event-message');
+           messageData.content = messageData.sender + " 님이 퇴장하셨습니다.";
+       } else {
+           messageElement.classList.add('chat-message');
+
+           let userNameElement = document.createElement('strong');
+           userNameElement.classList.add('nickname');
+           let usernameText = document.createTextNode(messageData.sender + " : ");
+           userNameElement.appendChild(usernameText);
+           messageElement.appendChild(userNameElement);
+       }
+
+       let textElement = document.createElement('span');
+       let messageText = document.createTextNode(messageData.content);
+
+       textElement.appendChild(messageText); // <span>채팅 내용</span>
+
+       messageElement.appendChild(textElement);
+
+       document.querySelector("#messageArea").appendChild(messageElement);
+
+       // 스크롤
+       let messageArea = document.querySelector("#messageArea");
+       messageArea.scrollTop = messageArea.scrollHeight;
+   }
+
+   window.onload = function() {
+      connect();
+   }
+
+   window.onbeforeunload = function() {
+      // 브라우저가 닫히기 전에 WebSocket 연결 종료
+      if (stompClient) {
+         stompClient.disconnect();
+      }
+   }
+</script>
+
+
+</head>
+<body>
+   <div>
+      <h2 style="color: #004d40">🏡 채팅</h2>
+      <ul id="messageArea">
+      </ul>
+
+      <!-- 입력창과 버튼을 감싸는 컨테이너 추가 -->
+      <div id="inputContainer">
+         <input type="text" id="name" placeholder="이름 입력"> <input
+            type="text" id="message" size="100" placeholder="메세지 입력"
+            onkeydown="if (event.keyCode == 13) sendMessage()">
+         <button onclick="sendMessage()">전송</button>
+         <button onclick="leaveChat()">퇴장</button>
+      </div>
+   </div>
+</body>
+
+</html>
